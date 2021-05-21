@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+       <link rel="icon" type="image/png" href="https://i.imgur.com/2Ci2LOJ.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.82.0">
+    <title>Películas ALS</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/album/">
+
+<script>
+  function modal(){
+  document.getElementById("showModal").click();
+  }
+  function confirmarionModal(modalText){
+      if(modalText!='null') {
+          document.getElementById("showConfirmationModal").click();
+      }
+  }
+  function ponerValoracion(num){
+
+      for(var i=0;i<=9;i++){
+          document.getElementById("star"+i).className ="fa fa-star";
+      }
+
+      for(var i=num;i>=0;i--){
+          document.getElementById("star"+i).className ="fa fa-star checked";
+      }
+      for(var i=num+1;i<9;i++){
+          document.getElementById("star"+i).className ="fa fa-star";
+      }
+      document.getElementById("rate").value=(num+1)
+      document.getElementById("nota").innerHTML="Nota: "+(num+1)+"/10"
+  }
+
+  function checkComentario(){
+      var txt=document.getElementById("critica").value;
+      if(txt.length<50){
+          document.getElementById("errorTextArea").innerHTML="El texto tiene que tener al menos 50 caracteres";
+          document.getElementById("errorTextArea").style.visibility="visible";
+          document.getElementById("errorTextArea").style.color="red";
+          document.getElementById("critica").style.borderColor = "red";
+          return false;
+      }else{
+          if( document.getElementById("critica").style.borderColor=="red"){
+               document.getElementById("critica").style.borderColor="green"
+          }
+          document.getElementById("errorTextArea").style.visibility="hidden";
+          return true;
+      }
+  }
+
+  function mostrarTrailer(link,nombrePelicula){
+     document.getElementById("trailerModalBody").innerHTML='<div align="center" id="div"><iframe id="ytPlayer" width=\"770\" height=\"500\" src=\"'+link+'\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe></div>'
+
+      document.getElementById("labeltrailerModal").innerHTML="Trailer: "+nombrePelicula;
+      document.getElementById("showTrailerModal").click();
+  }
+  function cerrarModalTrailer(){
+         document.getElementById("trailerModalBody").innerHTML = '';
+        document.getElementById("trailerModal").style.display="none";
+  }
+
+
+</script>
+    <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.checked {
+  color: orange;
+}
+</style>
+
+
+      <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+  </head>
+  <body onload="confirmarionModal('{{modalText}}')">
+
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+     <a href="/" class="navbar-brand d-flex align-items-center">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-camera-reels-fill" viewBox="0 0 16 16">
+  <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+  <path d="M9 6a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+  <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7z"/>
+</svg>        <strong>Películas de ALS</strong>
+      </a>
+
+        {%if nickname != 'no_logged'%}
+         <a href="/showSeenFilms" class="navbar-brand d-flex align-items-center" style="font-size: 1em">
+        <strong>Peliculas Vistas</strong>
+              </a>
+         <a href="/showCritics" class="navbar-brand d-flex align-items-center" style="font-size: 1em">
+        <strong>Mis Críticas</strong>
+              </a>
+        {% endif %}
+
+        {%if nickname == 'no_logged'%}
+          <a href="{{url}}">Sign in</a>
+          {%else%}
+        <div id="container_lil">
+            <strong class="alert alert-warning">Usuario: {{nickname}}</strong>
+          <a href="{{url}}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#F0736B" class="bi bi-x-octagon-fill" viewBox="0 0 16 16">
+  <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+</svg></a>
+            </div>
+          {% endif %}
+
+    </div>
+  </div>
+</header>
+
+<main>
+
+
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="showModal" style="display: none;">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Nueva Crítica</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/handlerValorations" method="post" onsubmit="return checkComentario()">
+  <div class="form-group">
+    <label for="critica">Comentario</label>
+    <textarea class="form-control" id="critica" rows="3" name="critica" onchange="checkComentario()"></textarea>
+      <small id="errorTextArea" class="form-text" style="visibility: hidden;"></small>
+  </div>
+  <div class="form-check" align="center">
+     <label for="star0">Valoración</label>
+            </br>
+      <span id="star0" onclick="ponerValoracion(0)" class="fa fa-star"></span>
+      <span id="star1" onclick="ponerValoracion(1)" class="fa fa-star"></span>
+        <span id="star2" onclick="ponerValoracion(2)" class="fa fa-star"></span>
+    <span id="star3" onclick="ponerValoracion(3)" class="fa fa-star"></span>
+    <span id="star4" onclick="ponerValoracion(4)" class="fa fa-star"></span>
+      <span id="star5" onclick="ponerValoracion(5)" class="fa fa-star"></span>
+      <span id="star6" onclick="ponerValoracion(6)" class="fa fa-star"></span>
+      <span id="star7" onclick="ponerValoracion(7)" class="fa fa-star"></span>
+      <span id="star8" onclick="ponerValoracion(8)" class="fa fa-star"></span>
+      <span id="star9" onclick="ponerValoracion(9)" class="fa fa-star"></span>
+  </div>
+               <div class="alert alert-warning" id="nota" align="center">Nota: 0/10</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-outline-warning">Guardar</button>
+      </div>
+        <input type="hidden" id="rate" name="rate" value="0">
+      <input type="hidden" id="id_pelicula" name="id_pelicula" value="{{id_pelicula}}">
+        <input type="hidden" id="nombre" name="nombre" value="{{nickname}}">
+        <input type="hidden" id="id_usuario" name="id_usuario" value="{{id_user}}">
+        <input type="hidden" id="toDo" name="toDo" value="add">
+        </form>
+    </div>
+  </div>
+</div>
+
+
+  <div class="modal fade bd-example-modal-lg" onclick="cerrarModalTrailer()" id="trailerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="labeltrailerModal">Trailer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" onclick="cerrarModalTrailer()">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="trailerModalBody">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" onclick="cerrarModalTrailer()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <button id="showTrailerModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#trailerModal" style="visibility: hidden;">
+</button>
+
+
+
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Confirmación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-success" role="alert">{{modalText}}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <button id="showConfirmationModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="visibility: hidden;">
+</button>
+
+
+
+
+
+    </br>
+  <form class="album py-5 bg-light">
+    <div class="container">
+      {% set cont=0 %}
+      {% set cont2=0 %}
+      {% for pelis in peliculas %}
+      {% if (cont==0) %}
+       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="{{cont}}">
+      {% endif %}
+        <div class="col" id="{{cont}}">
+          <div class="card shadow-sm">
+              <h1 class="alert alert-warning" align="center">{{pelis.titulo}}</h1>
+              <div class="container">
+  <div class="row">
+    <div class="col-sm" align="center">
+
+
+          <img src="{{pelis.link_imagen}}" style="max-width:350px; max-height: 350px;">
+    </br>
+        </br>
+          <button id="boton" type="button" class="btn btn-outline-warning" onclick="mostrarTrailer('{{pelis.link_trailer}}','{{pelis.titulo}}')">Ver Trailer</button>
+
+    </div>
+    <div class="col-sm">
+     <h4 class="alert alert-dark">Sinopsis</h4>
+        <p>{{pelis.sinopsis}}</p>
+         <h4 class="alert alert-dark">Reparto</h4>
+        <p>{{pelis.reparto}}</p>
+    </div>
+    <div class="col-sm">
+        <h4 class="alert alert-dark">Director</h4>
+        <p>{{pelis.director}}</p>
+        <h4 class="alert alert-dark" >País</h4>
+        <p>{{pelis.pais}}</p>
+        <div align="center">
+        <h4 class="alert alert-dark">Valoración</h4>
+         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FFCA17" class="bi bi-star-fill" viewBox="0 0 16 16">
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+         </svg>
+        <h2 class="text-muted">{{"{:.2f}".format(val_media)}}</h2>
+        </div>
+    </div>
+  </div>
+</div>
+
+              <header class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+  </header>
+               <div id="contenedor" align="center">
+              <h4 class="alert alert-primary col-md-11" align="center">Críticas</h4>
+   </div>
+
+
+ {%if nickname != 'no_logged'%}
+             <div align="center" clas="col-md-4"> <button id="boton1" type="button" class="btn btn-outline-warning" onclick="modal()">Añadir Critica</button></div>
+              {% endif %}
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                  <div class="container">
+
+         <div class="row border-bottom alert alert-dark">
+    <div class="col-md-2 align-self-center">
+      <strong>Autor</strong>
+    </div>
+    <div class="col-md-8 align-self-center">
+      <strong>Crítica</strong>
+    </div>
+      <div class="col-md-2 align-self-center">
+     <strong>Valoración</strong>
+    </div>
+  </div>
+
+
+
+        {% for value in valoraciones %}
+  <div class="row border-bottom">
+    <div class="col-md-2 align-self-center">
+      {{value.autor}}
+    </div>
+    <div class="col-md-8 align-self-center">
+      {{value.comentario}}
+    </div>
+      <div class="col-md-2 align-self-center">
+       <h6><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFCA17" class="bi bi-star-fill" viewBox="0 0 16 16">
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+</svg> {{value.valoracion}}</h6>
+    </div>
+  </div>
+
+                      {%endfor%}
+
+
+
+</div>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if (cont==2) %}
+        </div>
+        </br>
+        {% set cont = 0 %}
+        {%else%}
+        {% set cont = cont+1 %}
+        {% endif %}
+        {% set cont2 = cont2+1 %}
+        {%endfor%}
+
+  </div>
+
+
+</main>
+<footer class="text-muted py-5">
+    <div class="container" align="center" >
+  <a href="/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+</svg>
+  </a>
+        </div>
+</footer>
+
+
+
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  </body>
+</html>

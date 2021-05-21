@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <link rel="icon" type="image/png" href="https://i.imgur.com/2Ci2LOJ.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.82.0">
+    <title>Películas ALS</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/album/">
+
+<script>
+  function ponerClickado(value){
+    document.getElementById("clickado").value=value;
+  }
+
+   function confirmarionModal(modalText){
+      if(modalText!='null') {
+          if(modalText.includes("Error")){
+              document.getElementById("divTextoModal").className="alert alert-danger";
+          }else{
+              document.getElementById("divTextoModal").className="alert alert-success";
+          }
+          document.getElementById("showConfirmationModal").click();
+          }
+      }
+
+
+  function clickBotonFormulario(){
+      var flag=true;
+      var flags=[]
+      flags[0]=revisarParametro('link_trailer');
+      flags[1]=revisarParametro('link_portada');
+      flags[2]=revisarParametro('titulo');
+      flags[3]=revisarParametro('director');
+      flags[4]=revisarParametro('pais');
+      flags[5]=revisarParametro('reparto');
+      flags[6]=revisarParametro('sinopsis');
+      for(var i=0;i<flags.length;i++){
+          if(flags[i]==false){
+              flag=false;
+          }
+      }
+      if(flag){
+          document.getElementById("botonSubmit").click();
+      }
+  }
+
+
+
+
+  function pasarDatos(idPelicula,idUser,action){
+ var txt='<form id="fromSendData" action="/seenFilms" method="post"><input type="hidden" id="id_pelicula" name="id_pelicula" value="'+idPelicula+'"><input type="hidden" id="id_user" name="id_user" value="'+idUser+'"><input type="hidden" id="toDo" name="toDo" value="'+action+'"><input id="buttonSendData" type="submit" style="display: none;"></form>';
+       document.getElementById("sendData").innerHTML=txt;
+       document.getElementById("buttonSendData").click();
+  }
+
+  function revisarParametro(id){
+      var flag=true;
+      switch(id){
+          case 'sinopsis':
+              if(document.getElementById(id).value.length<100){
+          document.getElementById(id).style.borderColor="red";
+          document.getElementById("error"+id).innerHTML="El campo "+id+" tiene que tener al menos 100 caracteres";
+           document.getElementById("error"+id).style.display="block";
+           flag=false;
+      }else{
+           document.getElementById(id).style.borderColor="grey";
+           document.getElementById("error"+id).style.display="none";
+      }
+              break;
+
+              case 'link_portada':
+                  var txt = document.getElementById(id).value;
+                  if((!txt.includes("http://"))&&(!txt.includes("https://"))&&(!txt.includes("www."))){
+                      flag=false
+                  }else{
+                       if((!txt.includes(".png"))&&(!txt.includes(".jpeg"))&&(!txt.includes(".jpg"))&&(!txt.includes(".gif"))){
+                        flag=false
+                       }
+                  }
+
+                  if (flag == true){
+                     document.getElementById(id).style.borderColor="grey";
+                     document.getElementById("error"+id).style.display="none";
+                  }else{
+                      document.getElementById(id).style.borderColor="red";
+                      document.getElementById("error"+id).innerHTML="El campo "+id+" tiene que ser un link válido";
+                       document.getElementById("error"+id).style.display="block";
+                  }
+
+                  break;
+              case 'link_trailer':
+                  var txt = document.getElementById(id).value;
+                  if(!txt.includes("https://www.youtube.com/embed/")){
+                      flag=false;
+                  }
+                  if (flag == true){
+                     document.getElementById(id).style.borderColor="grey";
+                     document.getElementById("error"+id).style.display="none";
+                  }else{
+                      document.getElementById(id).style.borderColor="red";
+                      document.getElementById("error"+id).innerHTML="El campo "+id+" tiene que ser un link de YouTube p.ej https://www.youtube.com/embed/aaaaa";
+                       document.getElementById("error"+id).style.display="block";
+                  }
+
+                  break;
+
+
+              default:
+                  if(document.getElementById(id).value.length==0){
+          document.getElementById(id).style.borderColor="red";
+          document.getElementById("error"+id).innerHTML="El campo "+id+" no puede ser vacío";
+           document.getElementById("error"+id).style.display="block";
+           flag=false;
+      }else{
+           document.getElementById(id).style.borderColor="grey";
+           document.getElementById("error"+id).style.display="none";
+           flag=true;
+      }
+
+                  break;
+      }
+
+    return flag;
+
+  }
+
+</script>
+
+    <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+  </head>
+  <body onload="confirmarionModal('{{modalText}}')">
+
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="/" class="navbar-brand d-flex align-items-center">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-camera-reels-fill" viewBox="0 0 16 16">
+  <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+  <path d="M9 6a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+  <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7z"/>
+</svg>        <strong>Películas de ALS</strong>
+      </a>
+
+        {%if nickname != 'no_logged'%}
+         <a href="/showSeenFilms" class="navbar-brand d-flex align-items-center" style="font-size: 1em">
+        <strong>Peliculas Vistas</strong>
+              </a>
+         <a href="/showCritics" class="navbar-brand d-flex align-items-center" style="font-size: 1em">
+        <strong>Mis Críticas</strong>
+              </a>
+        {% endif %}
+
+        {%if nickname == 'no_logged'%}
+          <a href="{{url}}">Sign in</a>
+          {%else%}
+        <div id="container_lil">
+            <strong class="alert alert-warning">Usuario: {{nickname}}</strong>
+          <a href="{{url}}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#F0736B" class="bi bi-x-octagon-fill" viewBox="0 0 16 16">
+  <path d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+</svg></a>
+            </div>
+          {% endif %}
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Insertar Película</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+     <form action="/handlerInsertFilm" method="post" onsubmit="return checkParametros()">
+          <div class="form-group">
+            <label for="titulo">Título</label>
+            <input type="text" class="form-control" id="titulo" name="titulo" aria-describedby="emailHelp" onfocusout="revisarParametro('titulo')">
+            <small id="errortitulo" class="form-text" style="display: none; color: red;"></small>
+        </div>
+
+
+
+           <div class="row">
+            <div class="col-sm">
+               <div class="form-group">
+               <label for="director">Director</label>
+            <input type="text" class="form-control" id="director" name="director" onfocusout="revisarParametro('director')">
+            <small id="errordirector" class="form-text" style="display: none; color: red;"></small>
+          </div>
+            </div>
+            <div class="col-sm">
+               <div class="form-group">
+            <label for="pais">País</label>
+            <input type="text" class="form-control" id="pais" name="pais" aria-describedby="emailHelp" onfocusout="revisarParametro('pais')">
+            <small id="errorpais" class="form-text" style="display: none; color: red;"></small>
+          </div>
+            </div>
+        </div>
+
+      <div class="form-group">
+            <label for="reparto">Reparto</label>
+            <textarea class="form-control" id="reparto" rows="3" name="reparto" onfocusout="revisarParametro('reparto')"></textarea>
+            <small id="errorreparto" class="form-text" style="display: none; color: red;"></small>
+  </div>
+
+
+   <div class="form-group">
+            <label for="sinopsis">Sinopsis</label>
+            <textarea class="form-control" id="sinopsis" name="sinopsis" rows="3" onfocusout="revisarParametro('sinopsis')"></textarea>
+               <small id="errorsinopsis" class="form-text" style="display: none; color: red;"></small>
+  </div>
+
+
+          <div class="row">
+
+            <div class="col-sm">
+               <div class="form-group">
+               <label for="link_trailer">Link Trailer</label>
+            <input type="text" class="form-control" id="link_trailer" name="link_trailer" onfocusout="revisarParametro('link_trailer')">
+                    <small id="errorlink_trailer" class="form-text" style="display: none; color: red;"></small>
+          </div>
+            </div>
+
+
+
+            <div class="col-sm">
+               <div class="form-group">
+            <label for="link_portada">Link Portada</label>
+            <input type="text" class="form-control" id="link_portada" name="link_portada" onfocusout="revisarParametro('link_portada')" aria-describedby="emailHelp">
+            <small id="errorlink_portada" class="form-text" style="display: none; color: red;">Links de FilmAffinity</small>
+          </div>
+            </div>
+
+
+  </div>
+
+
+
+<button type="submit" class="btn btn-outline-warning" style="display: none;" id="botonSubmit">Guardar</button>
+
+</form>
+
+
+
+      </div>
+
+
+      <div class="modal-footer">
+
+
+       <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-outline-warning" onclick="clickBotonFormulario()">Guardar</button>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+</header>
+
+<main>
+
+
+
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Albúm de películas</h1>
+        <p class="lead text-muted">Sin duda el mejor lugar para elegir películas según su valoración</p>
+      </div>
+
+    </div>
+      {%if admin == 'admin'%}
+      <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#exampleModal">
+  Añadir Pelicula
+</button>
+      {% endif %}
+
+
+  </section>
+
+
+
+
+
+
+<form class="album py-5 bg-light" action="/showfilm" method="post">
+    <div class="container">
+        {% set cont = 0 %}
+        {% set numElem = 0 %}
+        {% for pelis in peliculas %}
+
+
+         {% if cont==0 %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="{{cont}}">
+        {% endif %}
+
+
+        <div class="col" id="col{{cont}}">
+          <div class="card shadow-sm">
+            <img src="{{pelis.link_imagen}}" style="max-width:350px; max-height: 350px;">
+            <div class="card-body">
+
+
+
+
+              <p class="h3" align="center">{{pelis.titulo}}</p>
+
+
+
+
+
+                 {% if nickname != 'no_logged' %}
+                        {% if pelis.id_pelicula in favoritos %}
+
+                      <div align="center" onclick=pasarDatos({{pelis.id_pelicula}},{{id_user}},'delete')><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#FFCA17" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"/>
+</svg></div>
+                      {% else %}
+
+                 <div align="center" onclick=pasarDatos({{pelis.id_pelicula}},{{id_user}},'add')><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+  <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+  <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></div>
+
+                      {% endif %}
+
+                {% endif %}
+
+
+              <p class="card-text">{{pelis.sinopsis[0:130]}}...</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <input type="hidden" id="film0" name="film0" value="3">
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFCA17" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path>
+</svg>{{pelis.pais}}
+                </div>
+
+                <h6 class="text"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="#FFCA17" class="bi bi-star-fill" viewBox="0 0 16 16">
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+</svg> 0.00</h6>
+              </div>
+              <button type="submit" class="btn btn-sm btn-outline-warning btn-block"  onclick="ponerClickado({{pelis.id_pelicula}})">Valora</button>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      {% if cont == 2 %}
+    </div></br>
+        {% set cont = 0 %}
+        {%else%}
+        {% set cont = cont+1 %}
+        {% endif %}
+
+         {% set numElem = numElem+1 %}
+
+
+         {% if numElem == numPelis %}
+
+            {% if numElem%3 != 0%}
+        <div class="col" id="col{{cont}}"></div>
+        {% set numElem = numElem+1 %}
+        {% endif %}
+
+         {% if numElem%3 != 0%}
+        <div class="col" id="col{{cont}}"></div>
+        {% set numElem = numElem+1 %}
+        {% endif %}
+
+         {% if numElem%3 != 0%}
+        <div class="col" id="col{{cont}}"></div>
+        {% set numElem = numElem+1 %}
+        {% endif %}
+
+         {% if numElem%3 != 0%}
+        <div class="col" id="col{{cont}}"></div>
+        {% set numElem = numElem+1 %}
+        {% endif %}
+        </div>
+        {% endif %}
+
+         {%endfor%}
+
+
+</div>
+    <input type="hidden" id="clickado" name="clickado" value="0">
+</form>
+
+
+
+
+</main>
+ <div id="sendData" style="visibility: hidden;">hola</div>
+<footer class="text-muted py-5">
+    <div class="container" align="center" >
+  <a href="/">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+  <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+</svg>
+  </a>
+        </div>
+</footer>
+
+
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel1">Confirmación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div id="divTextoModal" class="alert alert-success" role="alert">{{modalText}}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <button id="showConfirmationModal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="visibility: hidden;">
+</button>
+
+
+
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  </body>
+</html>

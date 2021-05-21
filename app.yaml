@@ -1,0 +1,35 @@
+application: the-time
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+
+- url: /showfilm
+  script: handlers.showFilm.app
+- url: /insertDataDB
+  script: handlers.insertDataDB.app
+- url: /handlerValorations
+  script: handlers.handlerValorations.app
+- url: /seenFilms
+  script: handlers.seenFilms.app
+- url: /showSeenFilms
+  script: handlers.showSeenFilms.app
+- url: /showCritics
+  script: handlers.showCritics.app
+- url: /handlerInsertFilm
+  script: handlers.handlerInsertFilm.app
+- url: .*
+  script: handlers.main.app
+
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+- name: jinja2
+  version: "latest"
